@@ -1,19 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
-import { createThirdwebClient, getContract, prepareContractCall, readContract } from "thirdweb";
+import { createThirdwebClient, getContract } from "thirdweb";
 import { ThirdwebProvider, useActiveAccount, ConnectButton, useSendTransaction } from "thirdweb/react";
 import { defineChain } from "thirdweb/chains";
+import { transfer } from "thirdweb/extensions/erc20";
 
 const client = createThirdwebClient({ clientId: process.env.NEXT_PUBLIC_CLIENT_ID! });
 const arcTestnet = defineChain(1116);
 
+const USDC_ARC_TESTNET = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
+
 const T: Record<string, Record<string, string>> = {
-  en: { title: "Admin Panel", addEmployee: "Add Employee", empName: "Full Name", empWallet: "Wallet Address (0x...)", empSalary: "Monthly Salary (USDC)", addBtn: "Add Employee", employees: "Employees", salary: "Salary (USDC)", wallet: "Wallet", status: "Status", action: "Action", send: "Send USDC", locked: "Locked", ready: "Ready", paid: "Paid", days: "days", newNft: "New Payroll NFT", employee: "Select Employee", amount: "Amount (USDC)", create: "Mint & Stake NFT", notConnected: "Please connect your wallet", totalEmp: "Total Employees", totalLocked: "Locked NFTs", totalReady: "Ready to Pay", deleteBtn: "Remove", saving: "Saving to blockchain...", saved: "Saved to blockchain!", sending: "Sending USDC...", minting: "Minting NFT..." },
-  fr: { title: "Panneau Admin", addEmployee: "Ajouter un employé", empName: "Nom complet", empWallet: "Adresse portefeuille (0x...)", empSalary: "Salaire mensuel (USDC)", addBtn: "Ajouter", employees: "Employés", salary: "Salaire (USDC)", wallet: "Portefeuille", status: "Statut", action: "Action", send: "Envoyer USDC", locked: "Bloqué", ready: "Prêt", paid: "Payé", days: "jours", newNft: "Nouveau NFT", employee: "Sélectionner", amount: "Montant (USDC)", create: "Créer & Staker NFT", notConnected: "Connectez votre portefeuille", totalEmp: "Total employés", totalLocked: "NFTs bloqués", totalReady: "Prêt à payer", deleteBtn: "Supprimer", saving: "Enregistrement...", saved: "Enregistré!", sending: "Envoi USDC...", minting: "Création NFT..." },
-  de: { title: "Admin-Panel", addEmployee: "Mitarbeiter hinzufügen", empName: "Vollständiger Name", empWallet: "Wallet-Adresse (0x...)", empSalary: "Monatsgehalt (USDC)", addBtn: "Hinzufügen", employees: "Mitarbeiter", salary: "Gehalt (USDC)", wallet: "Wallet", status: "Status", action: "Aktion", send: "USDC senden", locked: "Gesperrt", ready: "Bereit", paid: "Bezahlt", days: "Tage", newNft: "Neue Gehalts-NFT", employee: "Auswählen", amount: "Betrag (USDC)", create: "NFT erstellen & staken", notConnected: "Bitte Wallet verbinden", totalEmp: "Mitarbeiter gesamt", totalLocked: "Gesperrte NFTs", totalReady: "Bereit zur Zahlung", deleteBtn: "Entfernen", saving: "Wird gespeichert...", saved: "Gespeichert!", sending: "USDC wird gesendet...", minting: "NFT wird erstellt..." },
-  es: { title: "Panel Admin", addEmployee: "Agregar empleado", empName: "Nombre completo", empWallet: "Dirección cartera (0x...)", empSalary: "Salario mensual (USDC)", addBtn: "Agregar", employees: "Empleados", salary: "Salario (USDC)", wallet: "Cartera", status: "Estado", action: "Acción", send: "Enviar USDC", locked: "Bloqueado", ready: "Listo", paid: "Pagado", days: "días", newNft: "Nuevo NFT", employee: "Seleccionar", amount: "Monto (USDC)", create: "Crear & Stakear NFT", notConnected: "Conecta tu cartera", totalEmp: "Total empleados", totalLocked: "NFTs bloqueados", totalReady: "Listo para pagar", deleteBtn: "Eliminar", saving: "Guardando...", saved: "Guardado!", sending: "Enviando USDC...", minting: "Creando NFT..." },
-  pt: { title: "Painel Admin", addEmployee: "Adicionar funcionário", empName: "Nome completo", empWallet: "Endereço carteira (0x...)", empSalary: "Salário mensal (USDC)", addBtn: "Adicionar", employees: "Funcionários", salary: "Salário (USDC)", wallet: "Carteira", status: "Status", action: "Ação", send: "Enviar USDC", locked: "Bloqueado", ready: "Pronto", paid: "Pago", days: "dias", newNft: "Novo NFT", employee: "Selecionar", amount: "Valor (USDC)", create: "Criar & Stakear NFT", notConnected: "Conecte sua carteira", totalEmp: "Total funcionários", totalLocked: "NFTs bloqueados", totalReady: "Pronto para pagar", deleteBtn: "Remover", saving: "Salvando...", saved: "Salvo!", sending: "Enviando USDC...", minting: "Criando NFT..." },
-  tr: { title: "Yönetici Paneli", addEmployee: "Çalışan Ekle", empName: "Ad Soyad", empWallet: "Cüzdan Adresi (0x...)", empSalary: "Aylık Maaş (USDC)", addBtn: "Ekle", employees: "Çalışanlar", salary: "Maaş (USDC)", wallet: "Cüzdan", status: "Durum", action: "İşlem", send: "USDC Gönder", locked: "Kilitli", ready: "Hazır", paid: "Ödendi", days: "gün", newNft: "Yeni Maaş NFT", employee: "Çalışan Seç", amount: "Miktar (USDC)", create: "NFT Oluştur & Stake Et", notConnected: "Lütfen cüzdanınızı bağlayın", totalEmp: "Toplam Çalışan", totalLocked: "Kilitli NFT", totalReady: "Ödemeye Hazır", deleteBtn: "Sil", saving: "Blockchain'e kaydediliyor...", saved: "Blockchain'e kaydedildi!", sending: "USDC gönderiliyor...", minting: "NFT oluşturuluyor..." },
+  en: { title: "Admin Panel", addEmployee: "Add Employee", empName: "Full Name", empWallet: "Wallet Address (0x...)", empSalary: "Monthly Salary (USDC)", addBtn: "Add Employee", employees: "Employees", salary: "Salary (USDC)", wallet: "Wallet", status: "Status", action: "Action", send: "Send USDC", locked: "Locked", ready: "Ready", paid: "Paid", days: "days", newNft: "New Payroll NFT", employee: "Select Employee", amount: "Amount (USDC)", create: "Mint & Stake NFT", notConnected: "Please connect your wallet", totalEmp: "Total Employees", totalLocked: "Locked NFTs", totalReady: "Ready to Pay", deleteBtn: "Remove", saving: "Saving...", saved: "Saved!", sending: "Sending USDC on-chain...", minting: "Minting NFT..." },
+  fr: { title: "Panneau Admin", addEmployee: "Ajouter un employé", empName: "Nom complet", empWallet: "Adresse portefeuille (0x...)", empSalary: "Salaire mensuel (USDC)", addBtn: "Ajouter", employees: "Employés", salary: "Salaire (USDC)", wallet: "Portefeuille", status: "Statut", action: "Action", send: "Envoyer USDC", locked: "Bloqué", ready: "Prêt", paid: "Payé", days: "jours", newNft: "Nouveau NFT", employee: "Sélectionner", amount: "Montant (USDC)", create: "Créer & Staker NFT", notConnected: "Connectez votre portefeuille", totalEmp: "Total employés", totalLocked: "NFTs bloqués", totalReady: "Prêt à payer", deleteBtn: "Supprimer", saving: "Enregistrement...", saved: "Enregistré!", sending: "Envoi USDC en cours...", minting: "Création NFT..." },
+  de: { title: "Admin-Panel", addEmployee: "Mitarbeiter hinzufügen", empName: "Vollständiger Name", empWallet: "Wallet-Adresse (0x...)", empSalary: "Monatsgehalt (USDC)", addBtn: "Hinzufügen", employees: "Mitarbeiter", salary: "Gehalt (USDC)", wallet: "Wallet", status: "Status", action: "Aktion", send: "USDC senden", locked: "Gesperrt", ready: "Bereit", paid: "Bezahlt", days: "Tage", newNft: "Neue Gehalts-NFT", employee: "Auswählen", amount: "Betrag (USDC)", create: "NFT erstellen & staken", notConnected: "Bitte Wallet verbinden", totalEmp: "Mitarbeiter gesamt", totalLocked: "Gesperrte NFTs", totalReady: "Bereit zur Zahlung", deleteBtn: "Entfernen", saving: "Wird gespeichert...", saved: "Gespeichert!", sending: "USDC wird on-chain gesendet...", minting: "NFT wird erstellt..." },
+  es: { title: "Panel Admin", addEmployee: "Agregar empleado", empName: "Nombre completo", empWallet: "Dirección cartera (0x...)", empSalary: "Salario mensual (USDC)", addBtn: "Agregar", employees: "Empleados", salary: "Salario (USDC)", wallet: "Cartera", status: "Estado", action: "Acción", send: "Enviar USDC", locked: "Bloqueado", ready: "Listo", paid: "Pagado", days: "días", newNft: "Nuevo NFT", employee: "Seleccionar", amount: "Monto (USDC)", create: "Crear & Stakear NFT", notConnected: "Conecta tu cartera", totalEmp: "Total empleados", totalLocked: "NFTs bloqueados", totalReady: "Listo para pagar", deleteBtn: "Eliminar", saving: "Guardando...", saved: "Guardado!", sending: "Enviando USDC on-chain...", minting: "Creando NFT..." },
+  pt: { title: "Painel Admin", addEmployee: "Adicionar funcionário", empName: "Nome completo", empWallet: "Endereço carteira (0x...)", empSalary: "Salário mensal (USDC)", addBtn: "Adicionar", employees: "Funcionários", salary: "Salário (USDC)", wallet: "Carteira", status: "Status", action: "Ação", send: "Enviar USDC", locked: "Bloqueado", ready: "Pronto", paid: "Pago", days: "dias", newNft: "Novo NFT", employee: "Selecionar", amount: "Valor (USDC)", create: "Criar & Stakear NFT", notConnected: "Conecte sua carteira", totalEmp: "Total funcionários", totalLocked: "NFTs bloqueados", totalReady: "Pronto para pagar", deleteBtn: "Remover", saving: "Salvando...", saved: "Salvo!", sending: "Enviando USDC on-chain...", minting: "Criando NFT..." },
+  tr: { title: "Yönetici Paneli", addEmployee: "Çalışan Ekle", empName: "Ad Soyad", empWallet: "Cüzdan Adresi (0x...)", empSalary: "Aylık Maaş (USDC)", addBtn: "Ekle", employees: "Çalışanlar", salary: "Maaş (USDC)", wallet: "Cüzdan", status: "Durum", action: "İşlem", send: "USDC Gönder", locked: "Kilitli", ready: "Hazır", paid: "Ödendi", days: "gün", newNft: "Yeni Maaş NFT", employee: "Çalışan Seç", amount: "Miktar (USDC)", create: "NFT Oluştur & Stake Et", notConnected: "Lütfen cüzdanınızı bağlayın", totalEmp: "Toplam Çalışan", totalLocked: "Kilitli NFT", totalReady: "Ödemeye Hazır", deleteBtn: "Sil", saving: "Kaydediliyor...", saved: "Kaydedildi!", sending: "USDC blockchain'e gönderiliyor...", minting: "NFT oluşturuluyor..." },
 };
 
 type Employee = { name: string; salary: number; status: string; days: number; wallet: string; unlockDate: number; };
@@ -30,7 +33,14 @@ function AdminPanel() {
   const [toast, setToast] = useState<Toast | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const account = useActiveAccount();
+  const { mutate: sendTx } = useSendTransaction();
   const t = T[lang];
+
+  const usdcContract = getContract({
+    client,
+    chain: arcTestnet,
+    address: USDC_ARC_TESTNET,
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem("payrollchain_employees");
@@ -91,16 +101,31 @@ function AdminPanel() {
   };
 
   const sendPayment = (i: number) => {
+    const emp = employees[i];
     showToast(t.sending, "loading");
-    setTimeout(() => {
-      setEmployees(prev => {
-        const updated = [...prev];
-        updated[i] = { ...updated[i], status: "paid" };
-        localStorage.setItem("payrollchain_employees", JSON.stringify(updated));
-        return updated;
+    try {
+      const transaction = transfer({
+        contract: usdcContract,
+        to: emp.wallet as `0x${string}`,
+        amount: emp.salary,
       });
-      showToast(lang === "tr" ? `${employees[i].name} adlı çalışana USDC gönderildi!` : `USDC sent to ${employees[i].name}!`, "success");
-    }, 1500);
+      sendTx(transaction, {
+        onSuccess: () => {
+          setEmployees(prev => {
+            const updated = [...prev];
+            updated[i] = { ...updated[i], status: "paid" };
+            localStorage.setItem("payrollchain_employees", JSON.stringify(updated));
+            return updated;
+          });
+          showToast(lang === "tr" ? `${emp.name} adlı çalışana ${emp.salary} USDC gönderildi!` : `${emp.salary} USDC sent to ${emp.name}!`, "success");
+        },
+        onError: () => {
+          showToast(lang === "tr" ? "İşlem başarısız! USDC bakiyenizi kontrol edin." : "Transaction failed! Check your USDC balance.", "error");
+        },
+      });
+    } catch {
+      showToast(lang === "tr" ? "Hata oluştu!" : "Error occurred!", "error");
+    }
   };
 
   const mintNFT = () => {
