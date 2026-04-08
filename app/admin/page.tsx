@@ -8,7 +8,7 @@ import { transfer } from "thirdweb/extensions/erc20";
 const client = createThirdwebClient({ clientId: process.env.NEXT_PUBLIC_CLIENT_ID! });
 const arcTestnet = defineChain(1116);
 
-const USDC_ARC_TESTNET = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
+const USDC_ARC_TESTNET = "0x3600000000000000000000000000000000000000";
 
 const T: Record<string, Record<string, string>> = {
   en: { title: "Admin Panel", addEmployee: "Add Employee", empName: "Full Name", empWallet: "Wallet Address (0x...)", empSalary: "Monthly Salary (USDC)", addBtn: "Add Employee", employees: "Employees", salary: "Salary (USDC)", wallet: "Wallet", status: "Status", action: "Action", send: "Send USDC", locked: "Locked", ready: "Ready", paid: "Paid", days: "days", newNft: "New Payroll NFT", employee: "Select Employee", amount: "Amount (USDC)", create: "Mint & Stake NFT", notConnected: "Please connect your wallet", totalEmp: "Total Employees", totalLocked: "Locked NFTs", totalReady: "Ready to Pay", deleteBtn: "Remove", saving: "Saving...", saved: "Saved!", sending: "Sending USDC on-chain...", minting: "Minting NFT..." },
