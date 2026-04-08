@@ -10,7 +10,17 @@ const client = createThirdwebClient({
   clientId: process.env.NEXT_PUBLIC_CLIENT_ID!,
 });
 
-const arcTestnet = defineChain(1116);
+const arcTestnet = defineChain({
+  id: 1116,
+  name: "Arc Testnet",
+  nativeCurrency: {
+    name: "USDC",
+    symbol: "USDC",
+    decimals: 18,
+  },
+  rpc: "https://rpc.testnet.arc.network",
+  testnet: true,
+});
 
 const translations: Record<string, Record<string, string>> = {
   en: { title: "PayrollChain", subtitle: "Decentralized Payroll System", connect: "Connect Wallet", admin: "Go to Admin Panel", lang: "Language" },

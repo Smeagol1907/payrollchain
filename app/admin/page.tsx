@@ -6,7 +6,17 @@ import { defineChain } from "thirdweb/chains";
 import { transfer } from "thirdweb/extensions/erc20";
 
 const client = createThirdwebClient({ clientId: process.env.NEXT_PUBLIC_CLIENT_ID! });
-const arcTestnet = defineChain(1116);
+const arcTestnet = defineChain({
+  id: 1116,
+  name: "Arc Testnet",
+  nativeCurrency: {
+    name: "USDC",
+    symbol: "USDC",
+    decimals: 18,
+  },
+  rpc: "https://rpc.testnet.arc.network",
+  testnet: true,
+});
 
 const USDC_ARC_TESTNET = "0x3600000000000000000000000000000000000000";
 
