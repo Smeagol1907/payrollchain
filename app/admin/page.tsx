@@ -15,17 +15,46 @@ const arcTestnet = defineChain({
   testnet: true,
 });
 
+const ARC_CHAIN_ID_HEX = "0x45C";
+const ARC_RPC = "https://rpc.testnet.arc.network";
+
 const T: Record<string, Record<string, string>> = {
-  en: { title: "Admin Panel", addEmployee: "Add Employee", empName: "Full Name", empWallet: "Wallet Address (0x...)", empSalary: "Monthly Salary (USDC)", addBtn: "Add Employee", employees: "Employees", salary: "Salary (USDC)", wallet: "Wallet", status: "Status", action: "Action", send: "Send USDC", locked: "Locked", ready: "Ready", paid: "Paid", days: "days", newNft: "New Payroll NFT", employee: "Select Employee", amount: "Amount (USDC)", create: "Mint & Stake NFT", notConnected: "Please connect your wallet", totalEmp: "Total Employees", totalLocked: "Locked NFTs", totalReady: "Ready to Pay", deleteBtn: "Remove", saving: "Saving...", saved: "Saved!", sending: "Sending USDC on-chain...", minting: "Minting NFT..." },
-  fr: { title: "Panneau Admin", addEmployee: "Ajouter un employé", empName: "Nom complet", empWallet: "Adresse portefeuille (0x...)", empSalary: "Salaire mensuel (USDC)", addBtn: "Ajouter", employees: "Employés", salary: "Salaire (USDC)", wallet: "Portefeuille", status: "Statut", action: "Action", send: "Envoyer USDC", locked: "Bloqué", ready: "Prêt", paid: "Payé", days: "jours", newNft: "Nouveau NFT", employee: "Sélectionner", amount: "Montant (USDC)", create: "Créer & Staker NFT", notConnected: "Connectez votre portefeuille", totalEmp: "Total employés", totalLocked: "NFTs bloqués", totalReady: "Prêt à payer", deleteBtn: "Supprimer", saving: "Enregistrement...", saved: "Enregistré!", sending: "Envoi USDC...", minting: "Création NFT..." },
-  de: { title: "Admin-Panel", addEmployee: "Mitarbeiter hinzufügen", empName: "Vollständiger Name", empWallet: "Wallet-Adresse (0x...)", empSalary: "Monatsgehalt (USDC)", addBtn: "Hinzufügen", employees: "Mitarbeiter", salary: "Gehalt (USDC)", wallet: "Wallet", status: "Status", action: "Aktion", send: "USDC senden", locked: "Gesperrt", ready: "Bereit", paid: "Bezahlt", days: "Tage", newNft: "Neue Gehalts-NFT", employee: "Auswählen", amount: "Betrag (USDC)", create: "NFT erstellen & staken", notConnected: "Bitte Wallet verbinden", totalEmp: "Mitarbeiter gesamt", totalLocked: "Gesperrte NFTs", totalReady: "Bereit zur Zahlung", deleteBtn: "Entfernen", saving: "Wird gespeichert...", saved: "Gespeichert!", sending: "USDC wird gesendet...", minting: "NFT wird erstellt..." },
-  es: { title: "Panel Admin", addEmployee: "Agregar empleado", empName: "Nombre completo", empWallet: "Dirección cartera (0x...)", empSalary: "Salario mensual (USDC)", addBtn: "Agregar", employees: "Empleados", salary: "Salario (USDC)", wallet: "Cartera", status: "Estado", action: "Acción", send: "Enviar USDC", locked: "Bloqueado", ready: "Listo", paid: "Pagado", days: "días", newNft: "Nuevo NFT", employee: "Seleccionar", amount: "Monto (USDC)", create: "Crear & Stakear NFT", notConnected: "Conecta tu cartera", totalEmp: "Total empleados", totalLocked: "NFTs bloqueados", totalReady: "Listo para pagar", deleteBtn: "Eliminar", saving: "Guardando...", saved: "Guardado!", sending: "Enviando USDC...", minting: "Creando NFT..." },
-  pt: { title: "Painel Admin", addEmployee: "Adicionar funcionário", empName: "Nome completo", empWallet: "Endereço carteira (0x...)", empSalary: "Salário mensal (USDC)", addBtn: "Adicionar", employees: "Funcionários", salary: "Salário (USDC)", wallet: "Carteira", status: "Status", action: "Ação", send: "Enviar USDC", locked: "Bloqueado", ready: "Pronto", paid: "Pago", days: "dias", newNft: "Novo NFT", employee: "Selecionar", amount: "Valor (USDC)", create: "Criar & Stakear NFT", notConnected: "Conecte sua carteira", totalEmp: "Total funcionários", totalLocked: "NFTs bloqueados", totalReady: "Pronto para pagar", deleteBtn: "Remover", saving: "Salvando...", saved: "Salvo!", sending: "Enviando USDC...", minting: "Criando NFT..." },
-  tr: { title: "Yönetici Paneli", addEmployee: "Çalışan Ekle", empName: "Ad Soyad", empWallet: "Cüzdan Adresi (0x...)", empSalary: "Aylık Maaş (USDC)", addBtn: "Ekle", employees: "Çalışanlar", salary: "Maaş (USDC)", wallet: "Cüzdan", status: "Durum", action: "İşlem", send: "USDC Gönder", locked: "Kilitli", ready: "Hazır", paid: "Ödendi", days: "gün", newNft: "Yeni Maaş NFT", employee: "Çalışan Seç", amount: "Miktar (USDC)", create: "NFT Oluştur & Stake Et", notConnected: "Lütfen cüzdanınızı bağlayın", totalEmp: "Toplam Çalışan", totalLocked: "Kilitli NFT", totalReady: "Ödemeye Hazır", deleteBtn: "Sil", saving: "Kaydediliyor...", saved: "Kaydedildi!", sending: "USDC gönderiliyor...", minting: "NFT oluşturuluyor..." },
+  en: { title: "Admin Panel", addEmployee: "Add Employee", empName: "Full Name", empWallet: "Wallet Address (0x...)", empSalary: "Monthly Salary (USDC)", addBtn: "Add Employee", employees: "Employees", salary: "Salary (USDC)", wallet: "Wallet", status: "Status", action: "Action", send: "Send USDC", locked: "Locked", ready: "Ready", paid: "Paid", days: "days", newNft: "New Payroll NFT", employee: "Select Employee", amount: "Amount (USDC)", create: "Mint & Stake NFT", notConnected: "Please connect your wallet", totalEmp: "Total Employees", totalLocked: "Locked NFTs", totalReady: "Ready to Pay", deleteBtn: "Remove", saving: "Saving...", saved: "Saved!", sending: "Switching to Arc Testnet...", minting: "Minting NFT..." },
+  fr: { title: "Panneau Admin", addEmployee: "Ajouter un employé", empName: "Nom complet", empWallet: "Adresse portefeuille (0x...)", empSalary: "Salaire mensuel (USDC)", addBtn: "Ajouter", employees: "Employés", salary: "Salaire (USDC)", wallet: "Portefeuille", status: "Statut", action: "Action", send: "Envoyer USDC", locked: "Bloqué", ready: "Prêt", paid: "Payé", days: "jours", newNft: "Nouveau NFT", employee: "Sélectionner", amount: "Montant (USDC)", create: "Créer & Staker NFT", notConnected: "Connectez votre portefeuille", totalEmp: "Total employés", totalLocked: "NFTs bloqués", totalReady: "Prêt à payer", deleteBtn: "Supprimer", saving: "Enregistrement...", saved: "Enregistré!", sending: "Connexion Arc Testnet...", minting: "Création NFT..." },
+  de: { title: "Admin-Panel", addEmployee: "Mitarbeiter hinzufügen", empName: "Vollständiger Name", empWallet: "Wallet-Adresse (0x...)", empSalary: "Monatsgehalt (USDC)", addBtn: "Hinzufügen", employees: "Mitarbeiter", salary: "Gehalt (USDC)", wallet: "Wallet", status: "Status", action: "Aktion", send: "USDC senden", locked: "Gesperrt", ready: "Bereit", paid: "Bezahlt", days: "Tage", newNft: "Neue Gehalts-NFT", employee: "Auswählen", amount: "Betrag (USDC)", create: "NFT erstellen & staken", notConnected: "Bitte Wallet verbinden", totalEmp: "Mitarbeiter gesamt", totalLocked: "Gesperrte NFTs", totalReady: "Bereit zur Zahlung", deleteBtn: "Entfernen", saving: "Wird gespeichert...", saved: "Gespeichert!", sending: "Arc Testnet wird verbunden...", minting: "NFT wird erstellt..." },
+  es: { title: "Panel Admin", addEmployee: "Agregar empleado", empName: "Nombre completo", empWallet: "Dirección cartera (0x...)", empSalary: "Salario mensual (USDC)", addBtn: "Agregar", employees: "Empleados", salary: "Salario (USDC)", wallet: "Cartera", status: "Estado", action: "Acción", send: "Enviar USDC", locked: "Bloqueado", ready: "Listo", paid: "Pagado", days: "días", newNft: "Nuevo NFT", employee: "Seleccionar", amount: "Monto (USDC)", create: "Crear & Stakear NFT", notConnected: "Conecta tu cartera", totalEmp: "Total empleados", totalLocked: "NFTs bloqueados", totalReady: "Listo para pagar", deleteBtn: "Eliminar", saving: "Guardando...", saved: "Guardado!", sending: "Conectando Arc Testnet...", minting: "Creando NFT..." },
+  pt: { title: "Painel Admin", addEmployee: "Adicionar funcionário", empName: "Nome completo", empWallet: "Endereço carteira (0x...)", empSalary: "Salário mensal (USDC)", addBtn: "Adicionar", employees: "Funcionários", salary: "Salário (USDC)", wallet: "Carteira", status: "Status", action: "Ação", send: "Enviar USDC", locked: "Bloqueado", ready: "Pronto", paid: "Pago", days: "dias", newNft: "Novo NFT", employee: "Selecionar", amount: "Valor (USDC)", create: "Criar & Stakear NFT", notConnected: "Conecte sua carteira", totalEmp: "Total funcionários", totalLocked: "NFTs bloqueados", totalReady: "Pronto para pagar", deleteBtn: "Remover", saving: "Salvando...", saved: "Salvo!", sending: "Conectando Arc Testnet...", minting: "Criando NFT..." },
+  tr: { title: "Yönetici Paneli", addEmployee: "Çalışan Ekle", empName: "Ad Soyad", empWallet: "Cüzdan Adresi (0x...)", empSalary: "Aylık Maaş (USDC)", addBtn: "Ekle", employees: "Çalışanlar", salary: "Maaş (USDC)", wallet: "Cüzdan", status: "Durum", action: "İşlem", send: "USDC Gönder", locked: "Kilitli", ready: "Hazır", paid: "Ödendi", days: "gün", newNft: "Yeni Maaş NFT", employee: "Çalışan Seç", amount: "Miktar (USDC)", create: "NFT Oluştur & Stake Et", notConnected: "Lütfen cüzdanınızı bağlayın", totalEmp: "Toplam Çalışan", totalLocked: "Kilitli NFT", totalReady: "Ödemeye Hazır", deleteBtn: "Sil", saving: "Kaydediliyor...", saved: "Kaydedildi!", sending: "Arc Testnet'e geçiliyor...", minting: "NFT oluşturuluyor..." },
 };
 
 type Employee = { name: string; salary: number; status: string; days: number; wallet: string; unlockDate: number; };
 type Toast = { msg: string; type: "success" | "loading" | "error" };
+
+async function switchToArcTestnet() {
+  const ethereum = (window as any).ethereum;
+  if (!ethereum) throw new Error("MetaMask not found");
+  try {
+    await ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: ARC_CHAIN_ID_HEX }],
+    });
+  } catch (err: any) {
+    if (err.code === 4902) {
+      await ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [{
+          chainId: ARC_CHAIN_ID_HEX,
+          chainName: "Arc Testnet",
+          nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 18 },
+          rpcUrls: [ARC_RPC],
+          blockExplorerUrls: ["https://testnet.arcscan.app"],
+        }],
+      });
+    } else {
+      throw err;
+    }
+  }
+}
 
 function AdminPanel() {
   const [lang, setLang] = useState("en");
@@ -99,10 +128,12 @@ function AdminPanel() {
     });
   };
 
-  const sendPayment = (i: number) => {
+  const sendPayment = async (i: number) => {
     const emp = employees[i];
     showToast(t.sending, "loading");
     try {
+      await switchToArcTestnet();
+      showToast(lang === "tr" ? "USDC gönderiliyor..." : "Sending USDC...", "loading");
       const transaction = prepareTransaction({
         to: emp.wallet as `0x${string}`,
         value: toWei(emp.salary.toString()),
@@ -121,12 +152,12 @@ function AdminPanel() {
         },
         onError: (err: Error) => {
           console.error(err);
-          showToast(lang === "tr" ? "İşlem başarısız! Bakiyenizi kontrol edin." : "Transaction failed! Check your balance.", "error");
+          showToast(lang === "tr" ? "İşlem başarısız! Bakiyenizi kontrol edin." : "Transaction failed! Check your USDC balance.", "error");
         },
       });
     } catch (err) {
       console.error(err);
-      showToast(lang === "tr" ? "Hata oluştu!" : "Error occurred!", "error");
+      showToast(lang === "tr" ? "Ağ değiştirilemedi!" : "Could not switch network!", "error");
     }
   };
 
