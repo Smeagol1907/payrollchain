@@ -15,7 +15,7 @@ const arcTestnet = defineChain({
   testnet: true,
 });
 
-const ARC_CHAIN_ID_HEX = "0x45C";
+const ARC_CHAIN_ID_HEX = "0x45c";
 const ARC_RPC = "https://rpc.testnet.arc.network";
 
 const T: Record<string, Record<string, string>> = {
@@ -33,20 +33,25 @@ type Toast = { msg: string; type: "success" | "loading" | "error" };
 async function switchToArcTestnet() {
   const ethereum = (window as any).ethereum;
   if (!ethereum) throw new Error("MetaMask not found");
+  const chainIdHex = "0x" + (1116).toString(16);
   try {
     await ethereum.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: ARC_CHAIN_ID_HEX }],
+      params: [{ chainId: chainIdHex }],
     });
   } catch (err: any) {
     if (err.code === 4902) {
       await ethereum.request({
         method: "wallet_addEthereumChain",
         params: [{
-          chainId: ARC_CHAIN_ID_HEX,
+          chainId: chainIdHex,
           chainName: "Arc Testnet",
-          nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 18 },
-          rpcUrls: [ARC_RPC],
+          nativeCurrency: {
+            name: "USDC",
+            symbol: "USDC",
+            decimals: 18,
+          },
+          rpcUrls: ["https://rpc.testnet.arc.network"],
           blockExplorerUrls: ["https://testnet.arcscan.app"],
         }],
       });
@@ -55,6 +60,7 @@ async function switchToArcTestnet() {
     }
   }
 }
+
 
 function AdminPanel() {
   const [lang, setLang] = useState("en");
